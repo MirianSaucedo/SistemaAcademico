@@ -37,3 +37,7 @@ alter table ANHO_LECTIVO
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ANHO_LECTIVO to PUBLIC;
+
+--Agregue la columna observacion en la nota de los trabajos o pruebas de los alumnos
+
+alter table alm_notas_alumnos ADD observacion varchar(300)
