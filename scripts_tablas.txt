@@ -79,3 +79,40 @@ alter table MATERIAS
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on MATERIAS to PUBLIC;
+
+--PARA LA TABLA DE MATERIAS MADRE BY MS
+-- Create table
+create table MATERIA_MAESTRA
+(
+  COD_EMPRESA         VARCHAR2(5) not null,
+  COD_MATERIA_MAESTRA VARCHAR2(5) not null,
+  DESCRIPCION         VARCHAR2(100)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MATERIA_MAESTRA
+  add constraint PK_SUBMATERIAS primary key (COD_EMPRESA, COD_MATERIA_MAESTRA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on MATERIA_MAESTRA to PUBLIC;
