@@ -41,3 +41,41 @@ grant select, insert, update, delete, references, alter, index on ANHO_LECTIVO t
 --Agregue la columna observacion en la nota de los trabajos o pruebas de los alumnos
 
 alter table alm_notas_alumnos ADD observacion varchar(300)
+
+-- Para la tabla de materias actualizada, que vendria a ser sub materias by MS
+-- Create table
+create table MATERIAS
+(
+  COD_MATERIA         VARCHAR2(5) not null,
+  DESCRIPCION         VARCHAR2(100),
+  COD_EMPRESA         VARCHAR2(5) not null,
+  COD_MATERIA_MAESTRA VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MATERIAS
+  add constraint PK_MATERIAS primary key (COD_MATERIA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on MATERIAS to PUBLIC;
