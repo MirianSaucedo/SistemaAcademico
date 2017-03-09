@@ -1,0 +1,74 @@
+--PARA LA TABLA CAB DE MATERIAS POR CURSO BY MS
+-- Create table
+create table MAM_MATERIAS_CURSO_CAB
+(
+  COD_MATCUR  VARCHAR2(5) not null,
+  COD_EMPRESA VARCHAR2(5) not null,
+  COD_CURSO   VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MAM_MATERIAS_CURSO_CAB
+  add constraint PK_COD_MATCUR primary key (COD_EMPRESA, COD_MATCUR)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_CURSO_CAB to PUBLIC;
+
+-- PARA LA TABLA DETALLE DE MATERIAS POR CURSO
+-- Create table
+create table MAM_MATERIAS_CURSO_DET
+(
+  COD_MATCUR  VARCHAR2(5),
+  COD_EMPRESA VARCHAR2(5),
+  COD_MATERIA VARCHAR2(5) not null,
+  OBSERVACION VARCHAR2(100)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MAM_MATERIAS_CURSO_DET
+  add constraint PK_DETALLE primary key (COD_MATERIA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_CURSO_DET to PUBLIC;
