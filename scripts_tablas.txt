@@ -1,3 +1,4 @@
+
 hola probando
 para scripts de las tablas
 
@@ -122,3 +123,12 @@ alter table MATERIA_MAESTRA
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on MATERIA_MAESTRA to PUBLIC;
 >>>>>>> 37239405bf007d6ef86ce85b8a61fa073f6793a8
+
+
+
+
+
+--Añadido el 10/03/2017 para poder de una vez definir en el año lectivo las notas min, max, y aprueba
+alter table anho_lectivo ADD nota_minima number(2);
+alter table anho_lectivo ADD nota_maxima number(3);
+alter table anho_lectivo ADD nota_aprueba number(2);
