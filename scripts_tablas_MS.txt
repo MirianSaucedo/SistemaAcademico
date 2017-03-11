@@ -72,3 +72,5 @@ alter table MAM_MATERIAS_CURSO_DET
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_CURSO_DET to PUBLIC;
+-- para agregar el nivel a la cabecera de la tabla
+alter table MAM_MATERIAS_CURSO_CAB ADD cod_nivel varchar2(5);
