@@ -134,3 +134,7 @@ alter table anho_lectivo ADD nota_maxima number(3);
 alter table anho_lectivo ADD nota_aprueba number(2);
 alter table mam_escalas ADD cod_usuario_act varchar(10);
 alter table mam_escalas ADD fec_alta_act    date;
+--añadido para ver quien insertó en años lectivos
+
+alter table ANHO_LECTIVO ADD cod_usuario_alta varchar(10);
+alter table ANHO_LECTIVO ADD fec_alta    date;
