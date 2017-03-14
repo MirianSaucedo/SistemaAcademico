@@ -138,3 +138,4 @@ alter table mam_escalas ADD fec_alta_act    date;
 
 alter table ANHO_LECTIVO ADD cod_usuario_alta varchar(10);
 alter table ANHO_LECTIVO ADD fec_alta    date;
+alter table alm_notas_cab ADD cod_seccion varchar(2);
