@@ -184,10 +184,14 @@ grant select, insert, update, delete, references, alter, index on CAPACIDADES to
 -- RELACION ENTRE ANHO LECTIVO Y CAPACIDADES
 
 create table ANHO_CAPACIDADES
-(
-  COD_CAPACIDAD   VARCHAR2(4) not null,
-  ANHO_LECTIVO    VARCHAR2(4) not null,
-  NIVEL_EXIGENCIA NUMBER(5,1)
+( COD_ANHO_CAP    VARCHAR2(4) not null,
+  COD_CAPACIDAD   VARCHAR2(4),
+  ANHO_LECTIVO    VARCHAR2(4),
+  NIVEL_EXIGENCIA NUMBER(5,1),
+  COD_NIVEL       VARCHAR2(4),
+  COD_CURSO       VARCHAR2(4),
+  COD_MATERIA     VARCHAR2(4)
+ 
 )
 tablespace USERS
   pctfree 10
@@ -202,18 +206,8 @@ tablespace USERS
   );
 -- Create/Recreate primary, unique and foreign key constraints 
 alter table ANHO_CAPACIDADES
-  add constraint PK_ANHO_CAPACIDADES primary key (ANHO_LECTIVO, COD_CAPACIDAD)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
+  add constraint PK_ANHO_CAPA primary key (COD_ANHO_CAP)
+  disable;
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ANHO_CAPACIDADES to PUBLIC;
+
