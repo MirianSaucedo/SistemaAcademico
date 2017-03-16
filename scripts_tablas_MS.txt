@@ -78,9 +78,9 @@ alter table MAM_MATERIAS_CURSO_CAB ADD cod_nivel varchar2(5);
 -- Create table
 create table DOM_DOCENTES_CURMAT_CAB
 (
-  COD_EMPRESA   VARCHAR2(5) not null,
-  COD_DOCCM_COD VARCHAR2(5) not null,
-  COD_DOCENTE   VARCHAR2(5)
+  COD_EMPRESA VARCHAR2(5) not null,
+  COD_DOCCM   VARCHAR2(5) not null,
+  COD_DOCENTE VARCHAR2(5)
 )
 tablespace USERS
   pctfree 10
@@ -95,7 +95,7 @@ tablespace USERS
   );
 -- Create/Recreate primary, unique and foreign key constraints 
 alter table DOM_DOCENTES_CURMAT_CAB
-  add constraint PKM_DOCCURMAT primary key (COD_EMPRESA, COD_DOCCM_COD)
+  add constraint PKM_DOCCURMAT primary key (COD_EMPRESA, COD_DOCCM)
   using index 
   tablespace USERS
   pctfree 10
@@ -113,29 +113,15 @@ grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_C
 -- Create table
 create table DOM_DOCENTES_CURMAT_DET
 (
-  COD_DOCCM_COD VARCHAR2(5) not null,
-  COD_CURSO     VARCHAR2(5),
-  COD_MATERIA   VARCHAR2(5),
-  OBSERVACION   VARCHAR2(100)
+  COD_DOCCM   VARCHAR2(5),
+  COD_MATCUR  VARCHAR2(5),
+  COD_MATERIA VARCHAR2(5),
+  OBSERVACION VARCHAR2(100),
+  COD_EMPRESA VARCHAR2(5)
 )
 tablespace USERS
   pctfree 10
   initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table DOM_DOCENTES_CURMAT_DET
-  add constraint PKM_CURMAT_DET primary key (COD_DOCCM_COD)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
   maxtrans 255
   storage
   (
