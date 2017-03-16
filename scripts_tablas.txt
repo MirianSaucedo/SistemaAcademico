@@ -211,3 +211,9 @@ alter table ANHO_CAPACIDADES
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ANHO_CAPACIDADES to PUBLIC;
 
+--16/03/2017
+alter table alm_notas_cab ADD cod_nivel varchar(3);
+alter table alm_notas_cab ADD PUNTAJE         NUMBER(4);
+alter table alm_notas_cab ADD COD_CAPACIDAD   VARCHAR2(3);
+alter table alm_notas_cab ADD FECHA   DATE;
+
