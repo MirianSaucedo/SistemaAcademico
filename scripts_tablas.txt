@@ -217,3 +217,40 @@ alter table alm_notas_cab ADD PUNTAJE         NUMBER(4);
 alter table alm_notas_cab ADD COD_CAPACIDAD   VARCHAR2(3);
 alter table alm_notas_cab ADD FECHA   DATE;
 
+--Relacion entre alumnos y materias
+create table ALM_ALUMNOS_MATERIAS
+(
+  COD_MATRICULA         VARCHAR2(5) not null,
+  ANHO_LECTIVO          VARCHAR2(4) not null,
+  COD_ALUMNO            VARCHAR2(5) not null,
+  COD_MATERIA           VARCHAR2(5) not null
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_ALUMNOS_MATERIAS
+  add constraint PK_ALM_ALUMNOS_MATERIAS primary key (COD_MATRICULA, ANHO_LECTIVO, COD_ALUMNO, COD_MATERIA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_ALUMNOS_MATERIAS to PUBLIC;
+
