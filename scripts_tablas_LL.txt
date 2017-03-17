@@ -35,3 +35,42 @@ alter table MONEDA
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on MONEDA to PUBLIC;
+
+
+--- Actualización de Tabla de Formularios - Fecha:16-03-2017
+-- Create table
+create table SBM_FORMULARIO
+(
+  COD_EMPRESA VARCHAR2(1) not null,
+  FORMULARIO  VARCHAR2(15) not null,
+  TITULO      VARCHAR2(200),
+  COD_MODULO  VARCHAR2(10)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SBM_FORMULARIO
+  add constraint PK_SBM_FORMULARIO primary key (COD_EMPRESA, FORMULARIO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_FORMULARIO to PUBLIC;

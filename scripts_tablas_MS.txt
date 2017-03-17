@@ -74,3 +74,61 @@ alter table MAM_MATERIAS_CURSO_DET
 grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_CURSO_DET to PUBLIC;
 -- para agregar el nivel a la cabecera de la tabla
 alter table MAM_MATERIAS_CURSO_CAB ADD cod_nivel varchar2(5);
+--PARA LA TABLA DE DOCENTES POR CURSOS Y MATERIAS CABECERA Y DETALLE
+-- Create table
+create table DOM_DOCENTES_CURMAT_CAB
+(
+  COD_EMPRESA VARCHAR2(5) not null,
+  COD_DOCCM   VARCHAR2(5) not null,
+  COD_DOCENTE VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOM_DOCENTES_CURMAT_CAB
+  add constraint PKM_DOCCURMAT primary key (COD_EMPRESA, COD_DOCCM)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_CURMAT_CAB to PUBLIC;
+-- Create table
+create table DOM_DOCENTES_CURMAT_DET
+(
+  COD_DOCCM   VARCHAR2(5),
+  COD_MATCUR  VARCHAR2(5),
+  COD_MATERIA VARCHAR2(5),
+  OBSERVACION VARCHAR2(100),
+  COD_EMPRESA VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_CURMAT_DET to PUBLIC;
