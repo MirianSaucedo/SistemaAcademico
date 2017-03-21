@@ -254,3 +254,88 @@ alter table ALM_ALUMNOS_MATERIAS
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_ALUMNOS_MATERIAS to PUBLIC;
 
+-- Agregado el 21/03/2017
+-- Create table
+create table ALM_CALIFICACIONES_CAB
+(
+  COD_CALIFICACION    VARCHAR(10)not null,
+  ANHO_LECTIVO        VARCHAR2(4),
+  COD_ETAPA           VARCHAR2(3),
+  COD_NIVEL           VARCHAR2(3),
+  COD_CURSO           VARCHAR2(3),
+  TURNO               VARCHAR2(1),
+  SECCION             VARCHAR2(1),
+  COD_MATERIA_MAESTRA  VARCHAR2(5),
+  COD_MATERIA         VARCHAR2(5),
+  COD_USUARIO_ACT     VARCHAR2(15),
+  FEC_ACT             DATE,
+  COD_USUARIO_ALTA    VARCHAR2(15),
+  FEC_ALTA            DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_CAB
+  add constraint PK_ALM_CALIFICACIONES_CAB primary key (COD_CALIFICACION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_CAB to PUBLIC;
+
+
+
+-- Detalle de calificaciones
+create table ALM_CALIFICACIONES_DET
+(
+  COD_CALIFICACION   VARCHAR(10)not null,
+  COD_ALUMNO         VARCHAR2(5),
+  PUNTAJE_ALCANZADO  NUMBER(4,1),
+  CALIFICACION       NUMBER(3)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_DET
+  add constraint PK_ALM_CALIFICACIONES_DET primary key (COD_CALIFICACION, COD_ALUMNO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_DET to PUBLIC;
