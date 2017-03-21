@@ -76,11 +76,12 @@ grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_C
 alter table MAM_MATERIAS_CURSO_CAB ADD cod_nivel varchar2(5);
 --PARA LA TABLA DE DOCENTES POR CURSOS Y MATERIAS CABECERA Y DETALLE
 -- Create table
+-- Create table
 create table DOM_DOCENTES_CURMAT_CAB
 (
   COD_EMPRESA VARCHAR2(5) not null,
   COD_DOCCM   VARCHAR2(5) not null,
-  COD_DOCENTE VARCHAR2(5)
+  COD_DOCENTE VARCHAR2(5) not null
 )
 tablespace USERS
   pctfree 10
