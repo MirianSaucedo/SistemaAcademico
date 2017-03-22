@@ -133,3 +133,64 @@ tablespace USERS
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_CURMAT_DET to PUBLIC;
+--TABLA PARA LA PARAMETRIZACION DE LOS HORARIOS DE HS CATEDRAS
+-- Create table
+create table SBM_HORARIO_CAB
+(
+  COD_HORARIO     VARCHAR2(5) not null,
+  HS_CATEDRAS_MIN NUMBER(5,2),
+  OBSERVACION     VARCHAR2(50)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column SBM_HORARIO_CAB.HS_CATEDRAS_MIN
+  is 'SERIA PONER SI LAS HS CATEDRAS SON DE 10 MIN, 30 MIN, 40 MIN..';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SBM_HORARIO_CAB
+  add constraint PKM_HORARIO_CAB primary key (COD_HORARIO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_HORARIO_CAB to PUBLIC;
+-- Create table
+create table SBM_HORARIO_DET
+(
+  COD_HORARIO VARCHAR2(5),
+  HORAS       VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column SBM_HORARIO_DET.HORAS
+  is 'FORMATO DE HORA: HH:MM';
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_HORARIO_DET to PUBLIC;
