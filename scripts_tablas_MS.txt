@@ -199,3 +199,4 @@ alter table MAM_MATERIAS_CURSO_DET ADD hora_inicio varchar2(5);
 alter table MAM_MATERIAS_CURSO_DET ADD hora_fin varchar2(5);
 alter table MAM_MATERIAS_CURSO_DET ADD dia varchar2(2);
 alter table MAM_MATERIAS_CURSO_DET ADD turno varchar2(1);
+ALTER TABLE MAM_MATERIAS_CURSO_DET MODIFY COD_MATERIA NULL;
