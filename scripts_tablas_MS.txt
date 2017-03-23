@@ -194,3 +194,8 @@ comment on column SBM_HORARIO_DET.HORAS
   is 'FORMATO DE HORA: HH:MM';
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on SBM_HORARIO_DET to PUBLIC;
+--AGREGAR CAMPO DE HORAS Y DIAS AL DETALLE DE LA TABLA DE MATERIAS POR CURSO
+alter table MAM_MATERIAS_CURSO_DET ADD hora_inicio varchar2(5);
+alter table MAM_MATERIAS_CURSO_DET ADD hora_fin varchar2(5);
+alter table MAM_MATERIAS_CURSO_DET ADD dia varchar2(2);
+alter table MAM_MATERIAS_CURSO_DET ADD turno varchar2(1);
