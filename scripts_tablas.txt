@@ -339,3 +339,103 @@ alter table ALM_CALIFICACIONES_DET
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_DET to PUBLIC;
+
+
+
+
+
+--tABLA DE PROCESOS
+-- Create table
+create table ALM_PROCESOS_CAB
+(
+  COD_EMPRESA    VARCHAR2(5) not null,
+  COD_PROCESO       VARCHAR2(10) not null,
+  COD_MATERIA    VARCHAR2(10) not null,
+  COD_DOCENTE    VARCHAR2(10),
+  COD_CURSO      VARCHAR2(10),
+  COD_ETAPA      VARCHAR2(5),
+  TURNO          VARCHAR2(1),
+  ANHO_LECTIVO   VARCHAR2(4),
+  FEC_ALTA       DATE,
+  COD_USUARIO    VARCHAR2(15),
+  COD_SECCION    VARCHAR2(2),
+  COD_NIVEL      VARCHAR2(3),
+  COD_EVALUACION VARCHAR2(3),
+  PUNTAJE        NUMBER(4),
+  COD_CAPACIDAD  VARCHAR2(3),
+  FECHA          DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_PROCESOS_CAB
+  add constraint PK_ALM_PROCESOS_CAB primary key (COD_EMPRESA, COD_PROCESO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_PROCESOS_CAB to PUBLIC;
+
+
+
+
+
+--tABLA DE detalle de procesos
+-- Create table
+create table ALM_PROCESOS_DET
+(
+  COD_EMPRESA  VARCHAR2(5) not null,
+  COD_PROCESO     VARCHAR2(10) not null,
+  COD_ALUMNO   VARCHAR2(10) not null,
+  CALIFICACION NUMBER,
+  FECHA        DATE,
+  OBSERVACION  VARCHAR2(300)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_PROCESOS_DET
+  add constraint PK_ALM_PROCESOS_DET primary key (COD_EMPRESA, COD_PROCESO, COD_ALUMNO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_PROCESOS_DET to PUBLIC;
+
+
