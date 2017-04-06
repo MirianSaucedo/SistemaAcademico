@@ -184,14 +184,15 @@ grant select, insert, update, delete, references, alter, index on CAPACIDADES to
 -- RELACION ENTRE ANHO LECTIVO Y CAPACIDADES
 
 create table ANHO_CAPACIDADES
-( COD_ANHO_CAP    VARCHAR2(4) not null,
+(
   COD_CAPACIDAD   VARCHAR2(4),
   ANHO_LECTIVO    VARCHAR2(4),
   NIVEL_EXIGENCIA NUMBER(5,1),
   COD_NIVEL       VARCHAR2(4),
   COD_CURSO       VARCHAR2(4),
-  COD_MATERIA     VARCHAR2(4)
- 
+  COD_MATERIA     VARCHAR2(4),
+  COD_ANHO_CAP    VARCHAR2(4),
+  COD_ESCALA      VARCHAR2(6) not null
 )
 tablespace USERS
   pctfree 10
@@ -437,5 +438,85 @@ alter table ALM_PROCESOS_DET
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_PROCESOS_DET to PUBLIC;
+
+
+--24/03/2017 Tabla dnd guarda los procesos que incluirán para generar las notas
+-- Create table
+create table ALM_CALIFICACIONES_PRO
+( COD_CALIFICACION  VARCHAR2(10) not null,
+  COD_PROCESO       VARCHAR2(10) not null,
+  COD_EVALUACION    VARCHAR2(3), 
+  COD_CAPACIDAD     VARCHAR2(3),
+  PUNTAJE           NUMBER(4),
+  FECHA             DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_PRO
+  add constraint PK_ALM_CALIFICACIONES_PRO primary key (COD_CALIFICACION, COD_PROCESO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_PRO to PUBLIC;
+alter anho_capacidades ADD cod_escala varchar2(6);
+
+
+-- Create table
+create table ALM_CALIFICACIONES_ESCALA
+(
+  COD_CALIFICACION  VARCHAR2(10) not null,
+  COD_ESCALA        VARCHAR2(6)  not null,
+  COD_CAPACIDAD     VARCHAR2(6)  not null,
+  NIVEL_EXIGENCIA   NUMBER(3)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_ESCALA
+  add constraint PK_ALM_CALIFICACIONES_ESCALA primary key (COD_CALIFICACION, COD_ESCALA, COD_CAPACIDAD)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_ESCALA to PUBLIC;
+
 
 
