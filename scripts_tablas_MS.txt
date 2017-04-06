@@ -76,11 +76,12 @@ grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_C
 alter table MAM_MATERIAS_CURSO_CAB ADD cod_nivel varchar2(5);
 --PARA LA TABLA DE DOCENTES POR CURSOS Y MATERIAS CABECERA Y DETALLE
 -- Create table
+-- Create table
 create table DOM_DOCENTES_CURMAT_CAB
 (
   COD_EMPRESA VARCHAR2(5) not null,
   COD_DOCCM   VARCHAR2(5) not null,
-  COD_DOCENTE VARCHAR2(5)
+  COD_DOCENTE VARCHAR2(5) not null
 )
 tablespace USERS
   pctfree 10
@@ -132,3 +133,141 @@ tablespace USERS
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_CURMAT_DET to PUBLIC;
+--TABLA PARA LA PARAMETRIZACION DE LOS HORARIOS DE HS CATEDRAS
+-- Create table
+create table SBM_HORARIO_CAB
+(
+  COD_HORARIO     VARCHAR2(5) not null,
+  HS_CATEDRAS_MIN NUMBER(5,2),
+  OBSERVACION     VARCHAR2(50)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column SBM_HORARIO_CAB.HS_CATEDRAS_MIN
+  is 'SERIA PONER SI LAS HS CATEDRAS SON DE 10 MIN, 30 MIN, 40 MIN..';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SBM_HORARIO_CAB
+  add constraint PKM_HORARIO_CAB primary key (COD_HORARIO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_HORARIO_CAB to PUBLIC;
+-- Create table
+create table SBM_HORARIO_DET
+(
+  COD_HORARIO VARCHAR2(5),
+  HORAS       VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column SBM_HORARIO_DET.HORAS
+  is 'FORMATO DE HORA: HH:MM';
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_HORARIO_DET to PUBLIC;
+--AGREGAR CAMPO DE HORAS Y DIAS AL DETALLE DE LA TABLA DE MATERIAS POR CURSO
+alter table MAM_MATERIAS_CURSO_DET ADD hora_inicio varchar2(5);
+alter table MAM_MATERIAS_CURSO_DET ADD hora_fin varchar2(5);
+alter table MAM_MATERIAS_CURSO_DET ADD dia varchar2(2);
+alter table MAM_MATERIAS_CURSO_DET ADD turno varchar2(1);
+ALTER TABLE MAM_MATERIAS_CURSO_DET MODIFY COD_MATERIA NULL;
+--PARA LA TABLA DE CARGA DE ASISTENCIA_CAB
+-- Create table
+create table DOM_ASISTENCIA_CAB
+(
+  COD_EMPRESA    VARCHAR2(5),
+  COD_ASISTENCIA VARCHAR2(5) not null,
+  COD_DOCENTE    VARCHAR2(5),
+  COD_CURSO      VARCHAR2(5),
+  FECHA          DATE,
+  COD_NIVEL      VARCHAR2(5),
+  COD_MATERIA    VARCHAR2(5)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column DOM_ASISTENCIA_CAB.COD_DOCENTE
+  is 'TRAE DE LA TABLA dom_docentes_curmat_cab';
+comment on column DOM_ASISTENCIA_CAB.COD_CURSO
+  is 'TRAE DE LA TABLA MAM_MATERIAS_CURSO_CAB';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOM_ASISTENCIA_CAB
+  add constraint PK_ASISTENCIA_CAB primary key (COD_ASISTENCIA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_ASISTENCIA_CAB to PUBLIC;
+--PARA LA CARGA DE ASISTENCIA_dET
+-- Create table
+create table DOM_ASISTENCIA_DET
+(
+  COD_EMPRESA    VARCHAR2(5),
+  COD_ASISTENCIA VARCHAR2(5),
+  COD_ALUMNO     VARCHAR2(5),
+  ASISTENCIA     VARCHAR2(1),
+  OBSERVACION    VARCHAR2(100)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column DOM_ASISTENCIA_DET.ASISTENCIA
+  is 'P = PRESENTE, A= AUSENTE';
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_ASISTENCIA_DET to PUBLIC;
