@@ -518,5 +518,68 @@ alter table ALM_CALIFICACIONES_ESCALA
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_ESCALA to PUBLIC;
 
+--Toda la distribucion de los puntajes, residuos , notas cuando se genera una calificacin por materia
+create table alm_calificaciones_puntajes
+(
+  cod_calificacion     VARCHAR2(5) not null,
+  calificacion         VARCHAR2(100),
+  residuo              number(5,2),
+  nota_2_desde         number(5,2),
+  nota_2_hasta         number(5,2),
+  nota_3_desde         number(5,2),
+  nota_3_hasta         number(5,2),
+  nota_4_desde         number(5,2),
+  nota_4_hasta         number(5,2),
+  nota_5_desde         number(5,2),
+  nota_5_hasta         number(5,2),
+  nota_6_desde         number(5,2),
+  nota_6_hasta         number(5,2),
+  nota_7_desde         number(5,2),
+  nota_7_hasta         number(5,2),
+  nota_8_desde         number(5,2),
+  nota_8_hasta         number(5,2),
+  nota_9_desde         number(5,2),
+  nota_9_hasta         number(5,2),
+  nota_10_desde        number(5,2),
+  nota_10_hasta        number(5,2),
+  res_nota_2           varchar2(1),
+  res_nota_3           varchar2(1),
+  res_nota_4           varchar2(1),
+  res_nota_5           varchar2(1),
+  res_nota_6           varchar2(1),
+  res_nota_7           varchar2(1),
+  res_nota_8           varchar2(1),
+  res_nota_9           varchar2(1),
+  res_nota_10          varchar2(1)
+  
+ )
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table alm_calificaciones_puntajes
+  add constraint PK_alm_calificaciones_puntajes primary key (cod_calificacion)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on alm_calificaciones_puntajes to PUBLIC;
 
 
