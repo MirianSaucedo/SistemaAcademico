@@ -583,3 +583,238 @@ alter table alm_calificaciones_puntajes
 grant select, insert, update, delete, references, alter, index on alm_calificaciones_puntajes to PUBLIC;
 
 
+--Calificaciones para materias maestras
+-- Create table
+create table ALM_CALIFICACIONES_CAB_MAESTRA
+(
+  COD_CALIFICACION    VARCHAR2(10) not null,
+  ANHO_LECTIVO        VARCHAR2(4),
+  COD_ETAPA           VARCHAR2(3),
+  COD_NIVEL           VARCHAR2(3),
+  COD_CURSO           VARCHAR2(3),
+  TURNO               VARCHAR2(1),
+  SECCION             VARCHAR2(1),
+  COD_MATERIA_MAESTRA VARCHAR2(5),
+  COD_USUARIO_ACT     VARCHAR2(15),
+  FEC_ACT             DATE,
+  COD_USUARIO_ALTA    VARCHAR2(15),
+  FEC_ALTA            DATE,
+  COD_ESCALA          VARCHAR2(10)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_CAB_MAESTRA
+  add constraint PK_ALM_CAL_CAB_MAESTRA primary key (COD_CALIFICACION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_CAB_MAESTRA to PUBLIC;
+
+
+
+----Tabla que guarda los puntajes por cada capacidad.
+-- Create table
+create table ALM_CALIF_ESC_MAESTRA
+(
+  COD_CALIFICACION VARCHAR2(10) not null,
+  COD_ESCALA       VARCHAR2(6),
+  COD_CAPACIDAD    VARCHAR2(6) not null,
+  NIVEL_EXIGENCIA  NUMBER(3),
+  TOT_CAPA         NUMBER(4,2)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIF_ESC_MAESTRA
+  add constraint PK_ALM_CALIF_ESC primary key (COD_CALIFICACION, COD_CAPACIDAD)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIF_ESC_MAESTRA to PUBLIC;
+
+--Tabla donde se guarda todos los rangos de las notas 2 3 4 5 
+-- Create table
+create table ALM_CALIF_PUNTAJES_MAESTRA
+(
+  COD_CALIFICACION VARCHAR2(5) not null,
+  CALIFICACION     VARCHAR2(100),
+  RESIDUO          NUMBER(5,2),
+  NOTA2_DESDE      NUMBER(5,2),
+  NOTA2_HASTA      NUMBER(5,2),
+  NOTA3_DESDE      NUMBER(5,2),
+  NOTA3_HASTA      NUMBER(5,2),
+  NOTA4_DESDE      NUMBER(5,2),
+  NOTA4_HASTA      NUMBER(5,2),
+  NOTA5_DESDE      NUMBER(5,2),
+  NOTA5_HASTA      NUMBER(5,2),
+  NOTA6_DESDE      NUMBER(5,2),
+  NOTA6_HASTA      NUMBER(5,2),
+  NOTA7_DESDE      NUMBER(5,2),
+  NOTA7_HASTA      NUMBER(5,2),
+  NOTA8_DESDE      NUMBER(5,2),
+  NOTA8_HASTA      NUMBER(5,2),
+  NOTA9_DESDE      NUMBER(5,2),
+  NOTA9_HASTA      NUMBER(5,2),
+  NOTA10_DESDE     NUMBER(5,2),
+  NOTA10_HASTA     NUMBER(5,2),
+  RES_NOTA_2       VARCHAR2(1),
+  RES_NOTA_3       VARCHAR2(1),
+  RES_NOTA_4       VARCHAR2(1),
+  RES_NOTA_5       VARCHAR2(1),
+  RES_NOTA_6       VARCHAR2(1),
+  RES_NOTA_7       VARCHAR2(1),
+  RES_NOTA_8       VARCHAR2(1),
+  RES_NOTA_9       VARCHAR2(1),
+  RES_NOTA_10      VARCHAR2(1),
+  RESIDUO_ACTUAL   NUMBER(3)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIF_PUNTAJES_MAESTRA
+  add constraint PK_ALM_CALIF_PUNTAJES_MAESTRA primary key (COD_CALIFICACION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIF_PUNTAJES_MAESTRA to PUBLIC;
+
+
+--Tabla donde se guarda los puntajes de los alumnos
+-- Create table
+create table ALM_CALIF_DET_MAESTRA
+(
+  COD_CALIFICACION  VARCHAR2(10) not null,
+  COD_ALUMNO        VARCHAR2(5) not null,
+  PUNTAJE_ALCANZADO NUMBER(4,1),
+  CALIFICACION      NUMBER(3)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIF_DET_MAESTRA
+  add constraint PK_ALM_CALIF_DET_MAESTRA primary key (COD_CALIFICACION, COD_ALUMNO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIF_DET_MAESTRA to PUBLIC;
+
+
+--Tabla en donde se guarda todos los procesos que involucra las materias que estan o pertenecen
+--a la materia maestra
+-- Create table
+create table ALM_CALIF_PRO_MAESTRA
+( 
+  COD_CALIFICACION VARCHAR2(10) not null,
+  COD_MATERIA      VARCHAR2(10) not null,
+  COD_PROCESO      VARCHAR2(10) not null,
+  COD_EVALUACION   VARCHAR2(3),
+  COD_CAPACIDAD    VARCHAR2(3),
+  PUNTAJE          NUMBER(4),
+  FECHA            DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIF_PRO_MAESTRA
+  add constraint PK_ALM_CALIF_PRO_MAESTRA primary key (COD_CALIFICACION, COD_PROCESO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIF_PRO_MAESTRA to PUBLIC;
+
