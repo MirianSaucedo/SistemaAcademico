@@ -1,14 +1,12 @@
-
-hola probando
-para scripts de las tablas
-
-
--- Para el ano lectivo 07/03/2017 by CV
-create table anho_lectivo
+--Tabla en donde se guarda a que materias cursara el alumno,
+--o mejor dicho a que materias se matricula
+create table ALM_ALUMNOS_MATERIAS
 (
-  ANHO_LECTIVO VARCHAR2(4) not null,
-  FECHA_INICIO  DATE,
-  FECHA_FIN     DATE
+  COD_MATRICULA VARCHAR2(5) not null,
+  ANHO_LECTIVO  VARCHAR2(4) not null,
+  COD_ALUMNO    VARCHAR2(5) not null,
+  COD_MATERIA   VARCHAR2(5) not null,
+  ACTIVO        VARCHAR2(1)
 )
 tablespace USERS
   pctfree 10
@@ -21,9 +19,12 @@ tablespace USERS
     minextents 1
     maxextents unlimited
   );
+-- Add comments to the columns 
+comment on column ALM_ALUMNOS_MATERIAS.ACTIVO
+  is 'Activo (S) o Inactivo (N) significa si va a cursar esa materia';
 -- Create/Recreate primary, unique and foreign key constraints 
-alter table ANHO_LECTIVO
-  add constraint PK_ANHO_LECTIVO primary key (ANHO_LECTIVO)
+alter table ALM_ALUMNOS_MATERIAS
+  add constraint PK_ALM_ALUMNOS_MATERIAS primary key (COD_MATRICULA, ANHO_LECTIVO, COD_ALUMNO, COD_MATERIA)
   using index 
   tablespace USERS
   pctfree 10
@@ -37,25 +38,32 @@ alter table ANHO_LECTIVO
     maxextents unlimited
   );
 -- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on ANHO_LECTIVO to PUBLIC;
+grant select, insert, update, delete, references, alter, index on ALM_ALUMNOS_MATERIAS to PUBLIC;
 
---Agregue la columna observacion en la nota de los trabajos o pruebas de los alumnos
 
-<<<<<<< HEAD
-alter table alm_notas_alumnos ADD observacion varchar(300);
-alter table mam_escalas ADD cod_usuario varchar(10);
-alter table mam_escalas ADD fec_alta    date;
-=======
-alter table alm_notas_alumnos ADD observacion varchar(300)
 
--- Para la tabla de materias actualizada, que vendria a ser sub materias by MS
--- Create table
-create table MATERIAS
+-----------Tabla cabecera de la escala, ya que una escala puede volver a tener detalle
+--         de varias capacidades, Institucionales o departamentales etc.
+
+create table MAM_ESCALAS
 (
-  COD_MATERIA         VARCHAR2(5) not null,
-  DESCRIPCION         VARCHAR2(100),
-  COD_EMPRESA         VARCHAR2(5) not null,
-  COD_MATERIA_MAESTRA VARCHAR2(5)
+  COD_EMPRESA         VARCHAR2(1) not null,
+  COD_ESCALA          VARCHAR2(5) not null,
+  COD_NIVEL           VARCHAR2(5),
+  COD_CURSO           VARCHAR2(5),
+  COD_MATERIA         VARCHAR2(5),
+  COD_ANHO_LECTIVO    VARCHAR2(7),
+  COD_TIPO_ESCALA     VARCHAR2(5),
+  DESC_TIPO_ESCALA    VARCHAR2(30),
+  PORC_EXIGENCIA_CB   NUMBER(4),
+  PORC_EXIGENCIA_GRAL NUMBER(4),
+  NOTA_MINIMA         NUMBER(2),
+  NOTA_MAXIMA         NUMBER(2),
+  NOTA_APRUEBA        NUMBER(2),
+  COD_USUARIO         VARCHAR2(10),
+  FEC_ALTA            DATE,
+  COD_USUARIO_ACT     VARCHAR2(10),
+  FEC_ALTA_ACT        DATE
 )
 tablespace USERS
   pctfree 10
@@ -68,9 +76,24 @@ tablespace USERS
     minextents 1
     maxextents unlimited
   );
+-- Add comments to the columns 
+comment on column MAM_ESCALAS.COD_TIPO_ESCALA
+  is 'Si la escala será por formula (F), o un porcentaje General (G)';
+comment on column MAM_ESCALAS.DESC_TIPO_ESCALA
+  is 'Por ejem, si es F, (LS-LI)+1/4. Será muy buena información con los años';
+comment on column MAM_ESCALAS.PORC_EXIGENCIA_CB
+  is 'Si es F, entonces de CB, cuanto % debe de hacer';
+comment on column MAM_ESCALAS.PORC_EXIGENCIA_GRAL
+  is 'Si es G, cuanto % de axigencia';
+comment on column MAM_ESCALAS.NOTA_MINIMA
+  is 'Esto para saber con los años, si llega a cambiar de 2 -10, pero ahora es de 1 - 5';
+comment on column MAM_ESCALAS.NOTA_MAXIMA
+  is 'Aquí iria 5';
+comment on column MAM_ESCALAS.NOTA_APRUEBA
+  is 'Aqui iria 2';
 -- Create/Recreate primary, unique and foreign key constraints 
-alter table MATERIAS
-  add constraint PK_MATERIAS primary key (COD_MATERIA)
+alter table MAM_ESCALAS
+  add constraint PK_MAM_ESCALAS primary key (COD_ESCALA)
   using index 
   tablespace USERS
   pctfree 10
@@ -84,104 +107,12 @@ alter table MATERIAS
     maxextents unlimited
   );
 -- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on MATERIAS to PUBLIC;
-
---PARA LA TABLA DE MATERIAS MADRE BY MS
--- Create table
-create table MATERIA_MAESTRA
-(
-  COD_EMPRESA         VARCHAR2(5) not null,
-  COD_MATERIA_MAESTRA VARCHAR2(5) not null,
-  DESCRIPCION         VARCHAR2(100)
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table MATERIA_MAESTRA
-  add constraint PK_SUBMATERIAS primary key (COD_EMPRESA, COD_MATERIA_MAESTRA)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on MATERIA_MAESTRA to PUBLIC;
->>>>>>> 37239405bf007d6ef86ce85b8a61fa073f6793a8
+grant select, insert, update, delete, references, alter, index on MAM_ESCALAS to PUBLIC;
 
 
 
-
-
---Añadido el 10/03/2017 para poder de una vez definir en el año lectivo las notas min, max, y aprueba
-alter table anho_lectivo ADD nota_minima number(2);
-alter table anho_lectivo ADD nota_maxima number(3);
-alter table anho_lectivo ADD nota_aprueba number(2);
-alter table mam_escalas ADD cod_usuario_act varchar(10);
-alter table mam_escalas ADD fec_alta_act    date;
---añadido para ver quien insertó en años lectivos
-
-alter table ANHO_LECTIVO ADD cod_usuario_alta varchar(10);
-alter table ANHO_LECTIVO ADD fec_alta    date;
-alter table alm_notas_cab ADD cod_seccion varchar(2);
-
-
---15/03/2017
--- Para el ano lectivo 07/03/2017 by CV
-create table CAPACIDADES
-(
-  COD_CAPACIDAD VARCHAR2(4) not null,
-  DESCRIPCION   VARCHAR(50)
- 
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table CAPACIDADES
-  add constraint PK_CAPACIDADES primary key (COD_CAPACIDAD)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on CAPACIDADES to PUBLIC;
-
-
-
-
--- RELACION ENTRE ANHO LECTIVO Y CAPACIDADES
+-------Este sería el detalle de la escala, puede tener una o varias capacidades, con diferentes 
+--porcentajes de exigencia
 
 create table ANHO_CAPACIDADES
 (
@@ -212,159 +143,32 @@ alter table ANHO_CAPACIDADES
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ANHO_CAPACIDADES to PUBLIC;
 
---16/03/2017
-alter table alm_notas_cab ADD cod_nivel varchar(3);
-alter table alm_notas_cab ADD PUNTAJE         NUMBER(4);
-alter table alm_notas_cab ADD COD_CAPACIDAD   VARCHAR2(3);
-alter table alm_notas_cab ADD FECHA   DATE;
-
---Relacion entre alumnos y materias
-create table ALM_ALUMNOS_MATERIAS
-(
-  COD_MATRICULA         VARCHAR2(5) not null,
-  ANHO_LECTIVO          VARCHAR2(4) not null,
-  COD_ALUMNO            VARCHAR2(5) not null,
-  COD_MATERIA           VARCHAR2(5) not null
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table ALM_ALUMNOS_MATERIAS
-  add constraint PK_ALM_ALUMNOS_MATERIAS primary key (COD_MATRICULA, ANHO_LECTIVO, COD_ALUMNO, COD_MATERIA)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on ALM_ALUMNOS_MATERIAS to PUBLIC;
-
--- Agregado el 21/03/2017
--- Create table
-create table ALM_CALIFICACIONES_CAB
-(
-  COD_CALIFICACION    VARCHAR(10)not null,
-  ANHO_LECTIVO        VARCHAR2(4),
-  COD_ETAPA           VARCHAR2(3),
-  COD_NIVEL           VARCHAR2(3),
-  COD_CURSO           VARCHAR2(3),
-  TURNO               VARCHAR2(1),
-  SECCION             VARCHAR2(1),
-  COD_MATERIA_MAESTRA  VARCHAR2(5),
-  COD_MATERIA         VARCHAR2(5),
-  COD_USUARIO_ACT     VARCHAR2(15),
-  FEC_ACT             DATE,
-  COD_USUARIO_ALTA    VARCHAR2(15),
-  FEC_ALTA            DATE
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table ALM_CALIFICACIONES_CAB
-  add constraint PK_ALM_CALIFICACIONES_CAB primary key (COD_CALIFICACION)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_CAB to PUBLIC;
-
-
-
--- Detalle de calificaciones
-create table ALM_CALIFICACIONES_DET
-(
-  COD_CALIFICACION   VARCHAR(10)not null,
-  COD_ALUMNO         VARCHAR2(5),
-  PUNTAJE_ALCANZADO  NUMBER(4,1),
-  CALIFICACION       NUMBER(3)
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table ALM_CALIFICACIONES_DET
-  add constraint PK_ALM_CALIFICACIONES_DET primary key (COD_CALIFICACION, COD_ALUMNO)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_DET to PUBLIC;
 
 
 
 
-
---tABLA DE PROCESOS
--- Create table
+----------Cabecera de la tabla donde se registran los procesos o trabajos realizados,
+---con sus respetivos puntajes totales y fecha de proceso.
 create table ALM_PROCESOS_CAB
 (
-  COD_EMPRESA    VARCHAR2(5) not null,
-  COD_PROCESO       VARCHAR2(10) not null,
-  COD_MATERIA    VARCHAR2(10) not null,
-  COD_DOCENTE    VARCHAR2(10),
-  COD_CURSO      VARCHAR2(10),
-  COD_ETAPA      VARCHAR2(5),
-  TURNO          VARCHAR2(1),
-  ANHO_LECTIVO   VARCHAR2(4),
-  FEC_ALTA       DATE,
-  COD_USUARIO    VARCHAR2(15),
-  COD_SECCION    VARCHAR2(2),
-  COD_NIVEL      VARCHAR2(3),
-  COD_EVALUACION VARCHAR2(3),
-  PUNTAJE        NUMBER(4),
-  COD_CAPACIDAD  VARCHAR2(3),
-  FECHA          DATE
+  COD_EMPRESA     VARCHAR2(5) not null,
+  COD_PROCESO     VARCHAR2(10) not null,
+  COD_MATERIA     VARCHAR2(10) not null,
+  COD_DOCENTE     VARCHAR2(10),
+  COD_CURSO       VARCHAR2(10),
+  COD_ETAPA       VARCHAR2(5),
+  TURNO           VARCHAR2(1),
+  ANHO_LECTIVO    VARCHAR2(4),
+  FEC_ALTA        DATE,
+  COD_USUARIO     VARCHAR2(15),
+  COD_SECCION     VARCHAR2(2),
+  COD_NIVEL       VARCHAR2(3),
+  COD_EVALUACION  VARCHAR2(3),
+  PUNTAJE         NUMBER(4),
+  COD_CAPACIDAD   VARCHAR2(3),
+  FECHA           DATE,
+  SOLO_EVALUATIVA VARCHAR2(1),
+  NE              NUMBER(4,1)
 )
 tablespace USERS
   pctfree 10
@@ -397,14 +201,12 @@ grant select, insert, update, delete, references, alter, index on ALM_PROCESOS_C
 
 
 
-
-
---tABLA DE detalle de procesos
--- Create table
+----Tabla detalle del proceso, en este se guarda los alumnos que rindieron 
+--ese proceso, en que fecha y el puntaje alcanzado del total
 create table ALM_PROCESOS_DET
 (
   COD_EMPRESA  VARCHAR2(5) not null,
-  COD_PROCESO     VARCHAR2(10) not null,
+  COD_PROCESO  VARCHAR2(10) not null,
   COD_ALUMNO   VARCHAR2(10) not null,
   CALIFICACION NUMBER,
   FECHA        DATE,
@@ -440,15 +242,220 @@ alter table ALM_PROCESOS_DET
 grant select, insert, update, delete, references, alter, index on ALM_PROCESOS_DET to PUBLIC;
 
 
---24/03/2017 Tabla dnd guarda los procesos que incluirán para generar las notas
--- Create table
+
+
+
+---Tabla cabecera de las calificaciones
+create table ALM_CALIFICACIONES_CAB
+(
+  COD_CALIFICACION    VARCHAR2(10) not null,
+  ANHO_LECTIVO        VARCHAR2(4),
+  COD_ETAPA           VARCHAR2(3),
+  COD_NIVEL           VARCHAR2(3),
+  COD_CURSO           VARCHAR2(3),
+  TURNO               VARCHAR2(1),
+  SECCION             VARCHAR2(1),
+  COD_MATERIA_MAESTRA VARCHAR2(5),
+  COD_MATERIA         VARCHAR2(5),
+  COD_USUARIO_ACT     VARCHAR2(15),
+  FEC_ACT             DATE,
+  COD_USUARIO_ALTA    VARCHAR2(15),
+  FEC_ALTA            DATE,
+  COD_ESCALA          VARCHAR2(10)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_CAB
+  add constraint PK_ALM_CALIFICACIONES_CAB primary key (COD_CALIFICACION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_CAB to PUBLIC;
+
+
+
+
+--En esta tabla se guarda las capacidades que se utilizaron 
+--para sacar las notas, es decir Nacionales, departamentales, y que porcentaje
+-- de exigencia tuvo, si era 70% o 60% y cosas así, y sus respetivos puntajes por capacidad
+
+create table ALM_CALIFICACIONES_ESCALA
+(
+  COD_CALIFICACION VARCHAR2(10) not null,
+  COD_ESCALA       VARCHAR2(6),
+  COD_CAPACIDAD    VARCHAR2(6) not null,
+  NIVEL_EXIGENCIA  NUMBER(3),
+  TOT_CAPA         NUMBER(4,2)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_ESCALA
+  add constraint PK_ALM_CALIFICACIONES_ESCALA primary key (COD_CALIFICACION, COD_CAPACIDAD)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_ESCALA to PUBLIC;
+
+
+
+
+---En esta tabla se guarda los rangos de los puntajes para las calificaciones, ejemplo del 30 al 35 
+--Nota 4 y cosas asi
+create table ALM_CALIFICACIONES_PUNTAJES
+(
+  COD_CALIFICACION VARCHAR2(5) not null,
+  CALIFICACION     VARCHAR2(100),
+  RESIDUO          NUMBER(5,2),
+  NOTA2_DESDE      NUMBER(5,2),
+  NOTA2_HASTA      NUMBER(5,2),
+  NOTA3_DESDE      NUMBER(5,2),
+  NOTA3_HASTA      NUMBER(5,2),
+  NOTA4_DESDE      NUMBER(5,2),
+  NOTA4_HASTA      NUMBER(5,2),
+  NOTA5_DESDE      NUMBER(5,2),
+  NOTA5_HASTA      NUMBER(5,2),
+  NOTA6_DESDE      NUMBER(5,2),
+  NOTA6_HASTA      NUMBER(5,2),
+  NOTA7_DESDE      NUMBER(5,2),
+  NOTA7_HASTA      NUMBER(5,2),
+  NOTA8_DESDE      NUMBER(5,2),
+  NOTA8_HASTA      NUMBER(5,2),
+  NOTA9_DESDE      NUMBER(5,2),
+  NOTA9_HASTA      NUMBER(5,2),
+  NOTA10_DESDE     NUMBER(5,2),
+  NOTA10_HASTA     NUMBER(5,2),
+  RES_NOTA_2       VARCHAR2(1),
+  RES_NOTA_3       VARCHAR2(1),
+  RES_NOTA_4       VARCHAR2(1),
+  RES_NOTA_5       VARCHAR2(1),
+  RES_NOTA_6       VARCHAR2(1),
+  RES_NOTA_7       VARCHAR2(1),
+  RES_NOTA_8       VARCHAR2(1),
+  RES_NOTA_9       VARCHAR2(1),
+  RES_NOTA_10      VARCHAR2(1),
+  RESIDUO_ACTUAL   NUMBER(3)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_PUNTAJES
+  add constraint PK_ALM_CALIFICACIONES_PUNTAJES primary key (COD_CALIFICACION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_PUNTAJES to PUBLIC;
+
+
+
+--En esta tabla se guarda las calificaciones por MATERIA de los alumnos,
+--Hay otra tabla que es por Materia_maestra
+create table ALM_CALIFICACIONES_DET
+(
+  COD_CALIFICACION  VARCHAR2(10) not null,
+  COD_ALUMNO        VARCHAR2(5) not null,
+  PUNTAJE_ALCANZADO NUMBER(4,1),
+  CALIFICACION      NUMBER(3)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ALM_CALIFICACIONES_DET
+  add constraint PK_ALM_CALIFICACIONES_DET primary key (COD_CALIFICACION, COD_ALUMNO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_DET to PUBLIC;
+
+
+---En esta tabla se guarda todos los procesos involucrados para sacar las calificaciones 
+--de esa materia. Ejemplo, trabajos en clase, trabajos practicos , etc
 create table ALM_CALIFICACIONES_PRO
-( COD_CALIFICACION  VARCHAR2(10) not null,
-  COD_PROCESO       VARCHAR2(10) not null,
-  COD_EVALUACION    VARCHAR2(3), 
-  COD_CAPACIDAD     VARCHAR2(3),
-  PUNTAJE           NUMBER(4),
-  FECHA             DATE
+(
+  COD_CALIFICACION VARCHAR2(10) not null,
+  COD_PROCESO      VARCHAR2(10) not null,
+  COD_EVALUACION   VARCHAR2(3),
+  COD_CAPACIDAD    VARCHAR2(3),
+  PUNTAJE          NUMBER(4),
+  FECHA            DATE,
+  COD_MATERIA      VARCHAR2(5)
 )
 tablespace USERS
   pctfree 10
@@ -478,113 +485,13 @@ alter table ALM_CALIFICACIONES_PRO
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_PRO to PUBLIC;
-alter anho_capacidades ADD cod_escala varchar2(6);
 
 
--- Create table
-create table ALM_CALIFICACIONES_ESCALA
-(
-  COD_CALIFICACION  VARCHAR2(10) not null,
-  COD_ESCALA        VARCHAR2(6)  not null,
-  COD_CAPACIDAD     VARCHAR2(6)  not null,
-  NIVEL_EXIGENCIA   NUMBER(3)
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table ALM_CALIFICACIONES_ESCALA
-  add constraint PK_ALM_CALIFICACIONES_ESCALA primary key (COD_CALIFICACION, COD_ESCALA, COD_CAPACIDAD)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_ESCALA to PUBLIC;
-
---Toda la distribucion de los puntajes, residuos , notas cuando se genera una calificacin por materia
-create table alm_calificaciones_puntajes
-(
-  cod_calificacion     VARCHAR2(5) not null,
-  calificacion         VARCHAR2(100),
-  residuo              number(5,2),
-  nota_2_desde         number(5,2),
-  nota_2_hasta         number(5,2),
-  nota_3_desde         number(5,2),
-  nota_3_hasta         number(5,2),
-  nota_4_desde         number(5,2),
-  nota_4_hasta         number(5,2),
-  nota_5_desde         number(5,2),
-  nota_5_hasta         number(5,2),
-  nota_6_desde         number(5,2),
-  nota_6_hasta         number(5,2),
-  nota_7_desde         number(5,2),
-  nota_7_hasta         number(5,2),
-  nota_8_desde         number(5,2),
-  nota_8_hasta         number(5,2),
-  nota_9_desde         number(5,2),
-  nota_9_hasta         number(5,2),
-  nota_10_desde        number(5,2),
-  nota_10_hasta        number(5,2),
-  res_nota_2           varchar2(1),
-  res_nota_3           varchar2(1),
-  res_nota_4           varchar2(1),
-  res_nota_5           varchar2(1),
-  res_nota_6           varchar2(1),
-  res_nota_7           varchar2(1),
-  res_nota_8           varchar2(1),
-  res_nota_9           varchar2(1),
-  res_nota_10          varchar2(1)
-  
- )
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table alm_calificaciones_puntajes
-  add constraint PK_alm_calificaciones_puntajes primary key (cod_calificacion)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on alm_calificaciones_puntajes to PUBLIC;
 
 
---Calificaciones para materias maestras
--- Create table
+
+---Tabla cabecera de calificaciones, peeero de Materia_maestra, es decir calificaciones
+--por Area, un Area vuelve a involucrar a varias materias
 create table ALM_CALIFICACIONES_CAB_MAESTRA
 (
   COD_CALIFICACION    VARCHAR2(10) not null,
@@ -631,9 +538,11 @@ alter table ALM_CALIFICACIONES_CAB_MAESTRA
 grant select, insert, update, delete, references, alter, index on ALM_CALIFICACIONES_CAB_MAESTRA to PUBLIC;
 
 
+---Las escalas que se utilizaron para sacar
+--la calificacion de materias_maestra
+-- , osea las capacidades que se utilizaron con
+--sus respectivos porcentajes de exigencia.
 
-----Tabla que guarda los puntajes por cada capacidad.
--- Create table
 create table ALM_CALIF_ESC_MAESTRA
 (
   COD_CALIFICACION VARCHAR2(10) not null,
@@ -671,8 +580,10 @@ alter table ALM_CALIF_ESC_MAESTRA
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_CALIF_ESC_MAESTRA to PUBLIC;
 
---Tabla donde se guarda todos los rangos de las notas 2 3 4 5 
--- Create table
+
+---Se guarda los rangos para las notas de  materias_maestra, ejemplo
+-- de 30 a 35 nota 4, y cosas asi.
+
 create table ALM_CALIF_PUNTAJES_MAESTRA
 (
   COD_CALIFICACION VARCHAR2(5) not null,
@@ -737,8 +648,7 @@ alter table ALM_CALIF_PUNTAJES_MAESTRA
 grant select, insert, update, delete, references, alter, index on ALM_CALIF_PUNTAJES_MAESTRA to PUBLIC;
 
 
---Tabla donde se guarda los puntajes de los alumnos
--- Create table
+---Los alumnos involucrados de las calificaciones de las materias_maestras
 create table ALM_CALIF_DET_MAESTRA
 (
   COD_CALIFICACION  VARCHAR2(10) not null,
@@ -776,11 +686,13 @@ alter table ALM_CALIF_DET_MAESTRA
 grant select, insert, update, delete, references, alter, index on ALM_CALIF_DET_MAESTRA to PUBLIC;
 
 
---Tabla en donde se guarda todos los procesos que involucra las materias que estan o pertenecen
---a la materia maestra
--- Create table
+
+
+--Los procesos realizados que involucran las materias que pertenecen a materias_maestras
+--Ejemplo : Trabajo en clase de la materia matematicas, trabajo practico de la mteria Fisica
+--y cosas asi
 create table ALM_CALIF_PRO_MAESTRA
-( 
+(
   COD_CALIFICACION VARCHAR2(10) not null,
   COD_MATERIA      VARCHAR2(10) not null,
   COD_PROCESO      VARCHAR2(10) not null,
@@ -817,4 +729,123 @@ alter table ALM_CALIF_PRO_MAESTRA
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on ALM_CALIF_PRO_MAESTRA to PUBLIC;
+
+
+--tabla de anho_lectivo
+create table ANHO_LECTIVO
+(
+  ANHO_LECTIVO     VARCHAR2(4) not null,
+  FECHA_INICIO     DATE,
+  FECHA_FIN        DATE,
+  NOTA_MINIMA      NUMBER(2),
+  NOTA_MAXIMA      NUMBER(3),
+  NOTA_APRUEBA     NUMBER(2),
+  COD_USUARIO_ALTA VARCHAR2(10),
+  FEC_ALTA         DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ANHO_LECTIVO
+  add constraint PK_ANHO_LECTIVO primary key (ANHO_LECTIVO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ANHO_LECTIVO to PUBLIC;
+
+
+--tabla donde se guarda la descripcion de las capacidades nada mas
+--Ejemplo :Nacionales, departamentales, institucionales
+create table CAPACIDADES
+(
+  COD_CAPACIDAD VARCHAR2(4) not null,
+  DESCRIPCION   VARCHAR2(50)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table CAPACIDADES
+  add constraint PK_CAPACIDADES primary key (COD_CAPACIDAD)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on CAPACIDADES to PUBLIC;
+
+
+---Tabla donde se guarda las descrpciones de los medios de evaluacion, Ejmplo:
+--Trabajo practivo, trabajo en clase, trabajo grupal , etc
+create table EVALUACIONES
+(
+  COD_TIP_EVALUACION VARCHAR2(3) not null,
+  DESCRIPCION        VARCHAR2(50)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column EVALUACIONES.COD_TIP_EVALUACION
+  is 'se refiere si es sumativa o final o ninguno';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EVALUACIONES
+  add constraint PK_EVALUACIONES primary key (COD_TIP_EVALUACION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on EVALUACIONES to PUBLIC;
 
