@@ -1,48 +1,11 @@
---PARA LA TABLA CAB DE MATERIAS POR CURSO BY MS
 -- Create table
-create table MAM_MATERIAS_CURSO_CAB
+create table CURSOS
 (
-  COD_MATCUR  VARCHAR2(5) not null,
-  COD_EMPRESA VARCHAR2(5) not null,
-  COD_CURSO   VARCHAR2(5)
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Create/Recreate primary, unique and foreign key constraints 
-alter table MAM_MATERIAS_CURSO_CAB
-  add constraint PK_COD_MATCUR primary key (COD_EMPRESA, COD_MATCUR)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_CURSO_CAB to PUBLIC;
-
--- PARA LA TABLA DETALLE DE MATERIAS POR CURSO
--- Create table
-create table MAM_MATERIAS_CURSO_DET
-(
-  COD_MATCUR  VARCHAR2(5),
+  COD_CURSO   VARCHAR2(5) not null,
+  DESCRIPCION VARCHAR2(100),
   COD_EMPRESA VARCHAR2(5),
-  COD_MATERIA VARCHAR2(5) not null,
-  OBSERVACION VARCHAR2(100)
+  COD_USUARIO VARCHAR2(15),
+  FEC_ALTA    DATE
 )
 tablespace USERS
   pctfree 10
@@ -56,8 +19,8 @@ tablespace USERS
     maxextents unlimited
   );
 -- Create/Recreate primary, unique and foreign key constraints 
-alter table MAM_MATERIAS_CURSO_DET
-  add constraint PK_DETALLE primary key (COD_MATERIA)
+alter table CURSOS
+  add constraint PK_CURSOS primary key (COD_CURSO)
   using index 
   tablespace USERS
   pctfree 10
@@ -71,17 +34,179 @@ alter table MAM_MATERIAS_CURSO_DET
     maxextents unlimited
   );
 -- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_CURSO_DET to PUBLIC;
--- para agregar el nivel a la cabecera de la tabla
-alter table MAM_MATERIAS_CURSO_CAB ADD cod_nivel varchar2(5);
---PARA LA TABLA DE DOCENTES POR CURSOS Y MATERIAS CABECERA Y DETALLE
+grant select, insert, update, delete, references, alter, index on CURSOS to PUBLIC;
+
 -- Create table
+create table CURSOS_POR_NIVEL
+(
+  COD_CURSO_NIVEL VARCHAR2(5) not null,
+  COD_NIVEL       VARCHAR2(5) not null,
+  COD_CURSO       VARCHAR2(5) not null,
+  COD_USUARIO     VARCHAR2(15),
+  FEC_ALTA        DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table CURSOS_POR_NIVEL
+  add constraint PK_CURSOS_NIVEL primary key (COD_CURSO_NIVEL, COD_NIVEL, COD_CURSO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on CURSOS_POR_NIVEL to PUBLIC;
+
 -- Create table
-create table DOM_DOCENTES_CURMAT_CAB
+create table DOM_ASISTENCIA_CAB
+(
+  COD_EMPRESA    VARCHAR2(5),
+  COD_ASISTENCIA VARCHAR2(5) not null,
+  COD_DOCENTE    VARCHAR2(5),
+  COD_CURSO      VARCHAR2(5),
+  FECHA          DATE,
+  COD_NIVEL      VARCHAR2(5),
+  COD_MATERIA    VARCHAR2(5),
+  ANHO_LECTIVO   VARCHAR2(4),
+  HORA_INICIO    VARCHAR2(7),
+  HORA_FIN       VARCHAR2(7),
+  TURNO          VARCHAR2(15),
+  DIA            VARCHAR2(15),
+  SECCION        VARCHAR2(10),
+  COD_USUARIO    VARCHAR2(15),
+  FEC_ALTA       DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column DOM_ASISTENCIA_CAB.COD_DOCENTE
+  is 'TRAE DE LA TABLA dom_docentes_curmat_cab';
+comment on column DOM_ASISTENCIA_CAB.COD_CURSO
+  is 'TRAE DE LA TABLA MAM_MATERIAS_CURSO_CAB';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOM_ASISTENCIA_CAB
+  add constraint PK_ASISTENCIA_CAB primary key (COD_ASISTENCIA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_ASISTENCIA_CAB to PUBLIC;
+
+-- Create table
+create table DOM_ASISTENCIA_DET
+(
+  COD_EMPRESA    VARCHAR2(5),
+  COD_ASISTENCIA VARCHAR2(5),
+  COD_ALUMNO     VARCHAR2(5),
+  ASISTENCIA     VARCHAR2(1),
+  OBSERVACION    VARCHAR2(100)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column DOM_ASISTENCIA_DET.ASISTENCIA
+  is 'P = PRESENTE, A= AUSENTE';
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_ASISTENCIA_DET to PUBLIC;
+
+-- Create table
+create table DOM_DOCENTES
+(
+  COD_PERSONA     VARCHAR2(5) not null,
+  COD_DOCENTE     VARCHAR2(5) not null,
+  EDAD            NUMBER(2),
+  MATRICULA_NUM   VARCHAR2(10),
+  TITULO_OBTENIDO VARCHAR2(100),
+  COD_USUARIO     VARCHAR2(20),
+  FECHA_ALTA      DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOM_DOCENTES
+  add constraint PKM_DOCENTES primary key (COD_PERSONA, COD_DOCENTE)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOM_DOCENTES to PUBLIC;
+
+-- Create table
+create table MAM_MATERIAS_POR_CURSO
 (
   COD_EMPRESA VARCHAR2(5) not null,
-  COD_DOCCM   VARCHAR2(5) not null,
-  COD_DOCENTE VARCHAR2(5) not null
+  COD_CURSO   VARCHAR2(2) not null,
+  COD_MATERIA VARCHAR2(5) not null,
+  COD_DOCENTE VARCHAR2(5) not null,
+  HORA_INICIO VARCHAR2(5) not null,
+  HORA_FIN    VARCHAR2(5) not null,
+  DIA         VARCHAR2(2),
+  TURNO       VARCHAR2(1),
+  COD_SECCION VARCHAR2(10),
+  COD_USUARIO VARCHAR2(15),
+  FEC_ALTA    DATE
 )
 tablespace USERS
   pctfree 10
@@ -94,9 +219,16 @@ tablespace USERS
     minextents 1
     maxextents unlimited
   );
+-- Add comments to the columns 
+comment on column MAM_MATERIAS_POR_CURSO.COD_MATERIA
+  is 'TABLA DE MATERIAS';
+comment on column MAM_MATERIAS_POR_CURSO.DIA
+  is 'LU,MA,MI,JU,VI,SA,DO';
+comment on column MAM_MATERIAS_POR_CURSO.TURNO
+  is 'M,T,N';
 -- Create/Recreate primary, unique and foreign key constraints 
-alter table DOM_DOCENTES_CURMAT_CAB
-  add constraint PKM_DOCCURMAT primary key (COD_EMPRESA, COD_DOCCM)
+alter table MAM_MATERIAS_POR_CURSO
+  add constraint PK_MATERIA_C primary key (COD_EMPRESA, COD_CURSO, COD_MATERIA, COD_DOCENTE, HORA_INICIO, HORA_FIN)
   using index 
   tablespace USERS
   pctfree 10
@@ -110,15 +242,16 @@ alter table DOM_DOCENTES_CURMAT_CAB
     maxextents unlimited
   );
 -- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_CURMAT_CAB to PUBLIC;
+grant select, insert, update, delete, references, alter, index on MAM_MATERIAS_POR_CURSO to PUBLIC;
+
 -- Create table
-create table DOM_DOCENTES_CURMAT_DET
+create table MATERIA_MAESTRA
 (
-  COD_DOCCM   VARCHAR2(5),
-  COD_MATCUR  VARCHAR2(5),
-  COD_MATERIA VARCHAR2(5),
-  OBSERVACION VARCHAR2(100),
-  COD_EMPRESA VARCHAR2(5)
+  COD_EMPRESA         VARCHAR2(5) not null,
+  COD_MATERIA_MAESTRA VARCHAR2(5) not null,
+  DESCRIPCION         VARCHAR2(100),
+  COD_USUARIO         VARCHAR2(15),
+  FEC_ALTA            DATE
 )
 tablespace USERS
   pctfree 10
@@ -131,9 +264,137 @@ tablespace USERS
     minextents 1
     maxextents unlimited
   );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MATERIA_MAESTRA
+  add constraint PK_SUBMATERIAS primary key (COD_EMPRESA, COD_MATERIA_MAESTRA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 -- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on DOM_DOCENTES_CURMAT_DET to PUBLIC;
---TABLA PARA LA PARAMETRIZACION DE LOS HORARIOS DE HS CATEDRAS
+grant select, insert, update, delete, references, alter, index on MATERIA_MAESTRA to PUBLIC;
+
+-- Create table
+create table MATERIAS
+(
+  COD_MATERIA         VARCHAR2(5) not null,
+  DESCRIPCION         VARCHAR2(100),
+  COD_EMPRESA         VARCHAR2(5) not null,
+  COD_MATERIA_MAESTRA VARCHAR2(5),
+  COD_USUARIO         VARCHAR2(15),
+  FEC_ALTA            DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MATERIAS
+  add constraint PK_MATERIAS primary key (COD_MATERIA)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on MATERIAS to PUBLIC;
+
+-- Create table
+create table NIVELES
+(
+  COD_EMPRESA  VARCHAR2(5) not null,
+  COD_NIVEL    VARCHAR2(5) not null,
+  NOMBRE_NIVEL VARCHAR2(100)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table NIVELES
+  add constraint PKM_NIVEL primary key (COD_EMPRESA, COD_NIVEL)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on NIVELES to PUBLIC;
+
+-- Create table
+create table SECCION
+(
+  COD_SECCION VARCHAR2(5) not null,
+  DESCRIPCION VARCHAR2(30),
+  COD_EMPRESA VARCHAR2(5),
+  COD_USUARIO VARCHAR2(15),
+  FEC_ALTA    DATE
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SECCION
+  add constraint PK_SECCIONES primary key (COD_SECCION)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SECCION to PUBLIC;
+
 -- Create table
 create table SBM_HORARIO_CAB
 (
@@ -172,6 +433,7 @@ alter table SBM_HORARIO_CAB
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on SBM_HORARIO_CAB to PUBLIC;
+
 -- Create table
 create table SBM_HORARIO_DET
 (
@@ -194,80 +456,3 @@ comment on column SBM_HORARIO_DET.HORAS
   is 'FORMATO DE HORA: HH:MM';
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on SBM_HORARIO_DET to PUBLIC;
---AGREGAR CAMPO DE HORAS Y DIAS AL DETALLE DE LA TABLA DE MATERIAS POR CURSO
-alter table MAM_MATERIAS_CURSO_DET ADD hora_inicio varchar2(5);
-alter table MAM_MATERIAS_CURSO_DET ADD hora_fin varchar2(5);
-alter table MAM_MATERIAS_CURSO_DET ADD dia varchar2(2);
-alter table MAM_MATERIAS_CURSO_DET ADD turno varchar2(1);
-ALTER TABLE MAM_MATERIAS_CURSO_DET MODIFY COD_MATERIA NULL;
---PARA LA TABLA DE CARGA DE ASISTENCIA_CAB
--- Create table
-create table DOM_ASISTENCIA_CAB
-(
-  COD_EMPRESA    VARCHAR2(5),
-  COD_ASISTENCIA VARCHAR2(5) not null,
-  COD_DOCENTE    VARCHAR2(5),
-  COD_CURSO      VARCHAR2(5),
-  FECHA          DATE,
-  COD_NIVEL      VARCHAR2(5),
-  COD_MATERIA    VARCHAR2(5)
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Add comments to the columns 
-comment on column DOM_ASISTENCIA_CAB.COD_DOCENTE
-  is 'TRAE DE LA TABLA dom_docentes_curmat_cab';
-comment on column DOM_ASISTENCIA_CAB.COD_CURSO
-  is 'TRAE DE LA TABLA MAM_MATERIAS_CURSO_CAB';
--- Create/Recreate primary, unique and foreign key constraints 
-alter table DOM_ASISTENCIA_CAB
-  add constraint PK_ASISTENCIA_CAB primary key (COD_ASISTENCIA)
-  using index 
-  tablespace USERS
-  pctfree 10
-  initrans 2
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on DOM_ASISTENCIA_CAB to PUBLIC;
---PARA LA CARGA DE ASISTENCIA_dET
--- Create table
-create table DOM_ASISTENCIA_DET
-(
-  COD_EMPRESA    VARCHAR2(5),
-  COD_ASISTENCIA VARCHAR2(5),
-  COD_ALUMNO     VARCHAR2(5),
-  ASISTENCIA     VARCHAR2(1),
-  OBSERVACION    VARCHAR2(100)
-)
-tablespace USERS
-  pctfree 10
-  initrans 1
-  maxtrans 255
-  storage
-  (
-    initial 64K
-    next 1M
-    minextents 1
-    maxextents unlimited
-  );
--- Add comments to the columns 
-comment on column DOM_ASISTENCIA_DET.ASISTENCIA
-  is 'P = PRESENTE, A= AUSENTE';
--- Grant/Revoke object privileges 
-grant select, insert, update, delete, references, alter, index on DOM_ASISTENCIA_DET to PUBLIC;
