@@ -74,3 +74,83 @@ alter table SBM_FORMULARIO
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on SBM_FORMULARIO to PUBLIC;
+
+
+-- Scrip de la tabla correspondiente a Meses:
+-- Create table
+create table SBM_MESES
+(
+  MES         VARCHAR2(2) not null,
+  DESCRIPCION VARCHAR2(15),
+  ABREVIATURA VARCHAR2(4)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SBM_MESES
+  add constraint PK_MESES primary key (MES)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_MESES to PUBLIC;
+
+
+-- Sript de Tabla correspondiente a Niveles:
+ 
+-- Create table
+create table NIVELES
+(
+  COD_NIVEL    VARCHAR2(5) not null,
+  NOMBRE_NIVEL VARCHAR2(100),
+  COD_EMPRESA  VARCHAR2(1) not null
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table NIVELES
+  add constraint PKM_NIVEL primary key (COD_NIVEL)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on NIVELES to PUBLIC;
+
+
+
