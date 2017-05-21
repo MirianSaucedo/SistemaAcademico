@@ -731,8 +731,8 @@ grant select, insert, update, delete, references, alter, index on ALM_CALIF_PRO_
 create table ANHO_LECTIVO
 (
   ANHO_LECTIVO     VARCHAR2(4) not null,
-  FECHA_INICIO     DATE,
-  FECHA_FIN        DATE,
+  FECHA_INICIO     DATE not null,
+  FECHA_FIN        DATE not null,
   NOTA_MINIMA      NUMBER(2),
   NOTA_MAXIMA      NUMBER(3),
   NOTA_APRUEBA     NUMBER(2),
@@ -844,4 +844,118 @@ alter table EVALUACIONES
   );
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on EVALUACIONES to PUBLIC;
+
+
+
+ALTER TABLE ALM_ALUMNOS ADD RUTA_FOTO VARCHAR2(200);
+ALTER TABLE ALM_ALUMNOS ADD TIPO_FOTO VARCHAR2(10);
+alter table alm_matriculas_cab add colegio_ant varchar2(200);
+
+
+--tabla donde se guarda los pagos del alumno matriculado en ese año
+create table ALM_MATRICULAS_PAGOS
+(
+  COD_MATRICULA VARCHAR2(5) not null,
+  COD_PAGO      VARCHAR2(5) not null,
+  MONTO_PAGO    number(10,1)not null,
+  fecha_pago    date 
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+alter table ALM_MATRICULAS_PAGOS
+  add constraint PK_ALM_MATRICULAS_PAGOS primary key (COD_MATRICULA, COD_PAGO)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on ALM_MATRICULAS_PAGOS to PUBLIC;
+
+
+
+--PERMISOS para formularios
+create table sbm_permisos
+(
+  COD_PERMISO    VARCHAR2(10),
+  COD_USUARIO    VARCHAR2(10),
+  FORMULARIO     VARCHAR2(15),
+  PERMISO        VARCHAR2(30),
+  ACTIVO          VARCHAR2(1)
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table sbm_permisos
+  add constraint PK_sbm_permisos primary key (COD_USUARIO, FORMULARIO)
+  disable;
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_PERMISOS to PUBLIC;
+
+
+ALTER TABLE ALM_CALIFICACIONES_CAB ADD COD_DOCENTE VARCHAR2(5);
+
+-- Create table
+create table SBM_PERMISOS_DESC
+(
+  
+  FORMULARIO  VARCHAR2(15),
+  PERMISO     VARCHAR2(30)
+ 
+)
+tablespace USERS
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SBM_PERMISOS_DESC
+  add constraint PK_SBM_PERMISOS_DESC primary key (PERMISO, FORMULARIO)
+  disable;
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on SBM_PERMISOS_DESC to PUBLIC;
+
+
+
+
+
+
+
+
+
+
+
+
 
