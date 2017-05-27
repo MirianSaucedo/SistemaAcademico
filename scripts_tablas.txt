@@ -257,7 +257,8 @@ create table ALM_CALIFICACIONES_CAB
   FEC_ACT             DATE,
   COD_USUARIO_ALTA    VARCHAR2(15),
   FEC_ALTA            DATE,
-  COD_ESCALA          VARCHAR2(10)
+  COD_ESCALA          VARCHAR2(10),
+  TIPO                VARCHAR2(1)
 )
 tablespace USERS
   pctfree 10
@@ -270,6 +271,9 @@ tablespace USERS
     minextents 1
     maxextents unlimited
   );
+-- Add comments to the columns 
+comment on column ALM_CALIFICACIONES_CAB.TIPO
+  is 'Manual (''M'') o automatica (A)';
 -- Create/Recreate primary, unique and foreign key constraints 
 alter table ALM_CALIFICACIONES_CAB
   add constraint PK_ALM_CALIFICACIONES_CAB primary key (COD_CALIFICACION)
@@ -369,7 +373,8 @@ create table ALM_CALIFICACIONES_PUNTAJES
   RES_NOTA_8       VARCHAR2(1),
   RES_NOTA_9       VARCHAR2(1),
   RES_NOTA_10      VARCHAR2(1),
-  RESIDUO_ACTUAL   NUMBER(3)
+  RESIDUO_ACTUAL   NUMBER(3),
+  NE_PROMEDIO      NUMBER(5,2)
 )
 tablespace USERS
   pctfree 10
@@ -382,6 +387,9 @@ tablespace USERS
     minextents 1
     maxextents unlimited
   );
+-- Add comments to the columns 
+comment on column ALM_CALIFICACIONES_PUNTAJES.NE_PROMEDIO
+  is 'Una calificacion puede implicar varias capacidades, con diferentes prom, este es la media';
 -- Create/Recreate primary, unique and foreign key constraints 
 alter table ALM_CALIFICACIONES_PUNTAJES
   add constraint PK_ALM_CALIFICACIONES_PUNTAJES primary key (COD_CALIFICACION)
@@ -946,6 +954,9 @@ alter table SBM_PERMISOS_DESC
   disable;
 -- Grant/Revoke object privileges 
 grant select, insert, update, delete, references, alter, index on SBM_PERMISOS_DESC to PUBLIC;
+
+--Para saber si es una calificaciones especial
+alter table alm_calificaciones_cab add cali_tipo varchar2(1);
 
 
 
